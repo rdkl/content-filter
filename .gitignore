@@ -2,4 +2,4 @@ src/**/*.pyc
 .metadata/*
 .project
 .pydevproject
-
+.settings
