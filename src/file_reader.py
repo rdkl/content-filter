@@ -2,7 +2,6 @@
 #-*- coding: utf-8 -*-
 
 import csv
-import io
 
 from text_item import TextItem
 
@@ -54,7 +53,14 @@ class FileReader(object):
         while(True):
             list_lem = gen_lem.next()
             list_non_lem = gen_non_lem.next()
-     
+            
+            if list_lem[0] != list_non_lem[0]:
+                print "Error: ids are not the same!" 
+                print "Lem id =", list_lem[0]
+                print "Non-lem id = ", list_non_lem[0] 
+                yield TextItem(text_full="Ids are not the same")
+                continue
+                
             # Last one is empty.       
             if len(list_lem) != 7:
                 yield TextItem()
