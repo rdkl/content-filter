@@ -5,7 +5,7 @@ import wx
 ##############################################################################
 class MainFrame(wx.Frame):
     def __init__(self, title = 'GUI', size = (1200, 800)):
-        wx.Frame.__init__(self, None, -1, title = title, size = size)
+        wx.Frame.__init__(self, parent=None, id=-1, title=title, size=size)
         self.DoLayout()
         
     #-------------------------------------------------------------------------
