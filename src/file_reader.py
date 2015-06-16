@@ -19,7 +19,8 @@ class FileReader(object):
         
         try:
             self.__reader_non_lem = csv.reader(
-                                        self.reencode(open(filename_non_lem, "rb")), 
+                                        self.reencode(open(filename_non_lem, 
+                                                           "rb")), 
                                         delimiter=';', 
                                         quotechar='"')
         except IOError:
@@ -67,7 +68,8 @@ class FileReader(object):
             else:
                 yield TextItem(list_lem[0], list_lem[2], list_lem[3], 
                                list_lem[4], list_lem[5],
-                               list_lem[1], list_non_lem[1]) 
+                               list_lem[1], list_non_lem[1])
+                
     #-------------------------------------------------------------------------
 ##############################################################################
 

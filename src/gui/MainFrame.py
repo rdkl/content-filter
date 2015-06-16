@@ -2,23 +2,23 @@
 
 import wx
 
+
 ##############################################################################
 class MainFrame(wx.Frame):
     def __init__(self, title = 'GUI', size = (1366, 768)):
-        self.static_text_line_numbers = 20
         wx.Frame.__init__(self, parent=None, id=-1, title=title, size=size)
         self.DoLayout()
-            
+                
     #-------------------------------------------------------------------------
     def MakeStaticText(self, 
                        text="Test text", 
                        label="Text label", 
-                       size=(250, 250),
-                       i=1):
+                       size=(250, 250)):
         text_panel = wx.Panel(self, wx.ID_ANY)
     
+        style = wx.TE_MULTILINE|wx.TE_READONLY|wx.TE_RICH
         text_ctrl = wx.TextCtrl(text_panel, wx.ID_ANY, text, 
-                                  style=wx.TE_MULTILINE|wx.TE_READONLY, 
+                                  style=style, 
                                   size=size)
         staticbox = wx.StaticBox(self, wx.NewId(), label=label)
         staticbox_sizer = wx.StaticBoxSizer(staticbox, wx.HORIZONTAL)
@@ -35,15 +35,15 @@ class MainFrame(wx.Frame):
         self.text_info, sizer_info = self.MakeStaticText(
                                              text="Good news, everyone!", 
                                              label="Information",
-                                             size=(390, 700))
+                                             size=(450, 700))
         self.text_non_lemm, sizer_non_lemm = self.MakeStaticText(
                                              text="Non-lemm text\n", 
                                              label="Non lematized text",
-                                             size=(580, 700))
+                                             size=(450, 700))
         self.text_lemm, sizer_lemm = self.MakeStaticText(
                                              text="Lemm text\n", 
                                              label="Lematized text",
-                                             size=(390, 700), i =0)
+                                             size=(450, 700))
                 
         texts_sizer.Add(sizer_info)
         texts_sizer.Add(sizer_non_lemm)
@@ -67,38 +67,21 @@ class MainFrame(wx.Frame):
         
         self.Bind(wx.EVT_BUTTON, self.OnButtonClosePressed, 
                   self.button_close)
-        #self.Bind(wx.EVT_BUTTON, self.OnButtonDisplayPressed, 
-        #          self.button_display_mode)
         
         parent_sizer.Add(texts_sizer, flag=wx.EXPAND, proportion=1)
-        parent_sizer.Add(wx.StaticLine(self, wx.ID_ANY, size=self.GetSize()))
         parent_sizer.Add(button_sizer, flag=wx.EXPAND)
         self.SetSizer(parent_sizer)
         
         self.Layout()
         
-        self.PrintIntoStaticText(self.text_info, "- \n" * 100)
-   
     #-------------------------------------------------------------------------
-    def __PrepareStringToPrint(self):
-        pass
-    
+    def PrintIformation(self, string):
+        self.text_info.AppendText(string)
+       
     #-------------------------------------------------------------------------
-    def PrintIntoStaticText(self, static_text, string_to_write, 
-                               rewrite = True):
-        if rewrite:
-            static_text.SetLabel(string_to_write)
-            return
-        
-        displayed_string = static_text.GetLabelText()
-        number_of_string = displayed_string.count("\n")
-        if number_of_string > 5:
-            to_display = displayed_string[displayed_string.find("\n") + 1:] +\
-                            "\n" + string_to_write
-        else:
-            to_display = displayed_string + "\n" + string_to_write
-        
-        static_text.SetLabel(to_display)
+    def PrintTextItem(self, text_item):
+        self.text_lemm.SetValue(text_item.text_lem)
+        self.text_non_lemm.SetValue(text_item.text_full)
         
     #-------------------------------------------------------------------------
     def OnButtonClosePressed(self, event):
