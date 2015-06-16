@@ -5,19 +5,26 @@ import wx
 ##############################################################################
 class MainFrame(wx.Frame):
     def __init__(self, title = 'GUI', size = (1366, 768)):
+        self.static_text_line_numbers = 20
         wx.Frame.__init__(self, parent=None, id=-1, title=title, size=size)
         self.DoLayout()
             
     #-------------------------------------------------------------------------
-    def MakeStaticText(self, text="Test text", label="Text label"):
+    def MakeStaticText(self, 
+                       text="Test text", 
+                       label="Text label", 
+                       size=(250, 250),
+                       i=1):
         text_panel = wx.Panel(self, wx.ID_ANY)
-        static_text = wx.StaticText(text_panel, wx.ID_ANY, text, 
-                                  style=wx.TE_MULTILINE)
+    
+        text_ctrl = wx.TextCtrl(text_panel, wx.ID_ANY, text, 
+                                  style=wx.TE_MULTILINE|wx.TE_READONLY, 
+                                  size=size)
         staticbox = wx.StaticBox(self, wx.NewId(), label=label)
         staticbox_sizer = wx.StaticBoxSizer(staticbox, wx.HORIZONTAL)
-        staticbox_sizer.Add(text_panel, proportion=1, flag=wx.EXPAND)
+        staticbox_sizer.Add(text_panel, proportion=1, flag=wx.EXPAND|wx.ALL)
         
-        return static_text, staticbox_sizer
+        return text_ctrl, staticbox_sizer
         
     #-------------------------------------------------------------------------
     def DoLayout(self): 
@@ -27,18 +34,22 @@ class MainFrame(wx.Frame):
          
         self.text_info, sizer_info = self.MakeStaticText(
                                              text="Good news, everyone!", 
-                                             label="Information")
+                                             label="Information",
+                                             size=(390, 700))
         self.text_non_lemm, sizer_non_lemm = self.MakeStaticText(
                                              text="Non-lemm text\n", 
-                                             label="Non lematized text")
+                                             label="Non lematized text",
+                                             size=(580, 700))
         self.text_lemm, sizer_lemm = self.MakeStaticText(
                                              text="Lemm text\n", 
-                                             label="Lematized text")
+                                             label="Lematized text",
+                                             size=(390, 700), i =0)
                 
-        texts_sizer.Add(sizer_info, proportion = 1)
-        texts_sizer.Add(sizer_non_lemm, proportion = 1)
-        texts_sizer.Add(sizer_lemm, proportion = 1)  
-                
+        texts_sizer.Add(sizer_info)
+        texts_sizer.Add(sizer_non_lemm)
+        texts_sizer.Add(sizer_lemm)  
+        
+          
         self.button_save = wx.Button(self, wx.NewId(), "Save data")
         self.button_load = wx.Button(self, wx.NewId(), "Load data")
         self.button_settings = wx.Button(self, wx.NewId(), "Settings")
@@ -60,13 +71,18 @@ class MainFrame(wx.Frame):
         #          self.button_display_mode)
         
         parent_sizer.Add(texts_sizer, flag=wx.EXPAND, proportion=1)
+        parent_sizer.Add(wx.StaticLine(self, wx.ID_ANY, size=self.GetSize()))
         parent_sizer.Add(button_sizer, flag=wx.EXPAND)
         self.SetSizer(parent_sizer)
         
         self.Layout()
         
-        #self.PrintIntoStaticText(self.text_info, "- \n" * 100)
+        self.PrintIntoStaticText(self.text_info, "- \n" * 100)
    
+    #-------------------------------------------------------------------------
+    def __PrepareStringToPrint(self):
+        pass
+    
     #-------------------------------------------------------------------------
     def PrintIntoStaticText(self, static_text, string_to_write, 
                                rewrite = True):
