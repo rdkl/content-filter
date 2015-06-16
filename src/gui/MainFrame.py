@@ -54,6 +54,8 @@ class MainFrame(wx.Frame):
         button_sizer.Add(self.button_close, proportion = 0, flag = wx.ALL, 
                          border = 4)
         
+        self.Bind(wx.EVT_BUTTON, self.OnButtonClosePressed, 
+                  self.button_close)
         #self.Bind(wx.EVT_BUTTON, self.OnButtonDisplayPressed, 
         #          self.button_display_mode)
         
@@ -82,5 +84,9 @@ class MainFrame(wx.Frame):
         
         static_text.SetLabel(to_display)
         
+    #-------------------------------------------------------------------------
+    def OnButtonClosePressed(self, event):
+        self.Close(True)
+    
     #-------------------------------------------------------------------------
 ##############################################################################
