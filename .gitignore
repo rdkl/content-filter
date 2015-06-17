@@ -1,7 +1,8 @@
 src/**/*.pyc
+src/**/.*
 src/scripts/test*
-.metadata/*
-.project
-.pydevproject
-.settings
+src/scripts/build/*
+**/.*
 data/*
+libs/
+
