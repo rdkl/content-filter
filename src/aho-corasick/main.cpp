@@ -66,9 +66,20 @@ static PyObject *FindWordsInText(PyObject *self, PyObject *args) {
     return NULL;
 
   std::string text(command);
-  Print(FindMatchesInText(text));
-
-  return Py_None;
+  
+  std::vector<size_t> matches = FindMatchesInText(text);
+  Print(matches);
+  
+  PyObject *d = PyDict_New();
+  for (size_t i = 0; i < matches.size(); ++i) {
+    if (matches[i] != 0) {
+      PyObject* key = Py_BuildValue("i", i);
+      PyObject* val = Py_BuildValue("i", matches[i]);
+      PyDict_SetItem(d, key, val);
+    }
+  }
+  
+  return d;
 }
 
 static PyObject *Reset(PyObject *self, PyObject *args) {
