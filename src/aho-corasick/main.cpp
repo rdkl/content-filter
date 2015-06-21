@@ -118,6 +118,7 @@ PyMatcher_FindWordsInText(PyObject *self, PyObject *args) {
   
   // Return dict of matches.
   PyObject *dict = PyDict_New();
+
   for (size_t i = 0; i < matches.size(); ++i) {
     if (matches[i] != 0) {
       PyObject* key = Py_BuildValue("i", i);

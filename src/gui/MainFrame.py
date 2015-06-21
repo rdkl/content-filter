@@ -72,6 +72,9 @@ class MainFrame(wx.Frame):
         parent_sizer.Add(button_sizer, flag=wx.EXPAND)
         self.SetSizer(parent_sizer)
         
+        self.button_load.Bind(wx.EVT_BUTTON, self.OnKeyPressed)
+
+        
         self.Layout()
         
     #-------------------------------------------------------------------------
@@ -87,5 +90,23 @@ class MainFrame(wx.Frame):
     def OnButtonClosePressed(self, event):
         self.Close(True)
     
+    #-------------------------------------------------------------------------
+    def OnKeyPressed(self, event):
+        dlg = wx.SingleChoiceDialog(None,
+        'Is document ethnic?',
+        'Single Choice',
+         ["Ethnic", "Non-ethnic"])
+        
+        if dlg.ShowModal() == wx.ID_OK:
+            response = dlg.GetStringSelection()
+        else:
+            response = None
+            return
+            
+        dlg.Destroy()
+        
+        # response
+        # Load next document and save info about that document. 
+        
     #-------------------------------------------------------------------------
 ##############################################################################
