@@ -1,11 +1,13 @@
 #-*-coding: utf-8 -*-
 
 import wx
+from src.text_item import states
 
 
 ##############################################################################
 class MainFrame(wx.Frame):
-    def __init__(self, title = 'GUI', size = (1366, 768)):
+    def __init__(self, handler, title = 'GUI', size = (1366, 768)):
+        self.handler = handler
         wx.Frame.__init__(self, parent=None, id=-1, title=title, size=size)
         self.DoLayout()
                 
@@ -74,7 +76,7 @@ class MainFrame(wx.Frame):
         
         self.button_load.Bind(wx.EVT_BUTTON, self.OnKeyPressed)
 
-        
+        self.PrintTextItem(self.handler.GetText())
         self.Layout()
         
     #-------------------------------------------------------------------------
@@ -95,18 +97,21 @@ class MainFrame(wx.Frame):
         dlg = wx.SingleChoiceDialog(None,
         'Is document ethnic?',
         'Single Choice',
-         ["Ethnic", "Non-ethnic"])
+         states.values())
         
         if dlg.ShowModal() == wx.ID_OK:
             response = dlg.GetStringSelection()
         else:
             response = None
-            return
+            # return
             
         dlg.Destroy()
         
         # response
-        # Load next document and save info about that document. 
+        # Load next document and save info about that document.
+        print response
+        self.handler.SetState(response)
+        self.PrintTextItem(self.handler.GetText())
         
     #-------------------------------------------------------------------------
 ##############################################################################

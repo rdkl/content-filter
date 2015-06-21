@@ -1,11 +1,15 @@
 #!/usr/bin/env python
 #-*- coding: utf-8 -*-
 import textwrap
+from numpy.random.mtrand import set_state
 
+states = {0 : "Ethnic", 1 : "Non-ethnic", 2 : "Controversal", 3 : "Undefined"}
+states_rev = {value : key for key, value in states.items()}
 
 ##############################################################################
 class TextItem(object):
-    def __init__(self, id="-1", name="Default TextItem", url="empty url",
+    def __init__(self, id="-1", state=3, name="Default TextItem", 
+                 url="empty url",
                  date="", time="", text_lem="No text available", 
                  text_full="No text available"):
         self.__id = id
@@ -15,6 +19,7 @@ class TextItem(object):
         self.__time = time
         self.__text_lem = text_lem
         self.__text_full = text_full
+        self.__state = state
         if self.__name != "Default TextItem":
             self.__is_initialized = True
         else:
@@ -29,6 +34,35 @@ class TextItem(object):
     @property
     def name(self):
         return self.__name
+        
+    #-------------------------------------------------------------------------
+    @property
+    def state(self):
+        return self.__state
+    
+    #-------------------------------------------------------------------------
+    def set_state(self, state):
+        if type(state) == int:
+            if state in states.keys():
+                self.__state = state
+        else:
+            #print states_rev
+            if state in states_rev.keys():
+                #print states_rev[state], type(states_rev[state])
+                self.set_state(states_rev[state])
+                return
+            
+            # str case.
+            try:
+                state = int(state)
+                self.set_state(state)
+            except:
+                raise TypeError("Unknown state")
+        
+    #-------------------------------------------------------------------------
+    @property
+    def state_string(self):
+        return states[self.__state]
         
     #-------------------------------------------------------------------------
     @property

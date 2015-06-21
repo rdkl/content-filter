@@ -66,9 +66,14 @@ class FileReader(object):
             if len(list_lem) != 7:
                 yield TextItem()
             else:
-                yield TextItem(list_lem[0], list_lem[2], list_lem[3], 
-                               list_lem[4], list_lem[5],
-                               list_lem[1], list_non_lem[1])
+                yield TextItem(id=list_lem[0], 
+                               state=3,
+                               name=list_lem[2], 
+                               url=list_lem[3], 
+                               date=list_lem[4], 
+                               time=list_lem[5],
+                               text_lem=list_lem[1], 
+                               text_full=list_non_lem[1])
                 
     #-------------------------------------------------------------------------
 ##############################################################################

@@ -1,18 +1,25 @@
 #!/usr/bin/env python
 #-*- coding: utf-8 -*-
 
+import cPickle
+
 ##############################################################################
 class DocumentStorage(object):
     def __init__(self):
-        pass
+        self.dict = {}
     
     #-------------------------------------------------------------------------    
-    def Save(self):
-        pass
+    def AddDocument(self, doc_id, text_item):
+        self.dict[str(doc_id)] = text_item
+        
+    #-------------------------------------------------------------------------    
+    def Save(self, filename="../data/saved_documents"):
+        cPickle.dump(self.dict, open(filename, "wb"))
     
     #-------------------------------------------------------------------------    
-    def Load(self):
-        pass
+    def Load(self, filename="../data/saved_documents"):
+        self.dict = cPickle.load(open(filename, "rb"))
+        print self.dict.items()
 
     #-------------------------------------------------------------------------    
     def GetDocuments(self):
