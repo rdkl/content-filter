@@ -83,28 +83,40 @@ PyMatcher_Init(PyMatcher* self, PyObject *args)
   
   ((Matcher*) self->matcher)->Init(words);
 
-  return Py_None;
-}
-
-static PyObject *
-PyMatcher_FindWordsInText(PyObject *self, PyObject *args) {
-  const char *command;
-  if (!PyArg_ParseTuple(args, "s", &command))
-    return NULL;
-
-  std::string text(command);
-  
-  Matcher* local_matcher = (Matcher*) ((PyMatcher*) self)->matcher;
-  
-  for (size_t offset = 0; offset < text.size(); ++offset) {
-    local_matcher->Scan(text[offset]);
+  PyObject *dict = PyDict_New();  
+  for (size_t i = 0; i < words.size(); ++i) {
+    PyObject* key = Py_BuildValue("i", i);
+    PyObject* val = Py_BuildValue("s", words[i].c_str());
+    PyDict_SetItem(dict, key, val);
   }
 
-  std::vector<size_t> matches = local_matcher->words_occurrences_by_id_;
+  return dict;
+}
+
+// Now it resets matcher after every string. 
+static PyObject *
+PyMatcher_FindWordsInText(PyObject *self, PyObject *args) {
+  // Local assigment of matcher.
+  Matcher* matcher = (Matcher*) ((PyMatcher*) self)->matcher;
   
-  // std::vector<size_t> matches = local_matcher->FindMatchesInText(text);
-  Print(matches);
+  // Get input text from arguments.
+  const char *input_string;
+  if (!PyArg_ParseTuple(args, "s", &input_string)) {
+    return NULL;
+  }
   
+  std::string text(input_string);
+  
+  // Find words. All occurences are stored in words_occurrences_by_id_.
+  for (size_t offset = 0; offset < text.size(); ++offset) {
+    matcher->Scan(text[offset]);
+  }
+  std::vector<size_t> matches = matcher->words_occurrences_by_id_;
+  
+  // Prints results as vector (with all zeros) to console.
+  // Print(matches);
+  
+  // Return dict of matches.
   PyObject *dict = PyDict_New();
   for (size_t i = 0; i < matches.size(); ++i) {
     if (matches[i] != 0) {
@@ -113,24 +125,29 @@ PyMatcher_FindWordsInText(PyObject *self, PyObject *args) {
       PyDict_SetItem(dict, key, val);
     }
   }
-  
+
+  matcher->Reset();  
   return dict;
 }
 
-static PyObject *
-PyMatcher_Reset(PyObject *self) {
-  ((Matcher*) ((PyMatcher*) self)->matcher)->Reset();
-  return Py_None;
-}
+
+// Uncomment if there will be function like "FindWordsInCurrentLineOfText". 
+// static PyObject *
+// PyMatcher_Reset(PyObject *self) {
+//   ((Matcher*) ((PyMatcher*) self)->matcher)->Reset();
+//   return Py_None;
+// }
+
 
 static PyMethodDef PyMatcher_methods[] = {
     {"Init", (PyCFunction)PyMatcher_Init, METH_VARARGS, "Init"},
     {"FindWordsInText", (PyCFunction)PyMatcher_FindWordsInText, METH_VARARGS, 
     "FWIT"},
-    {"Reset", (PyCFunction)PyMatcher_Reset, METH_NOARGS, "Reset"},
+    // {"Reset", (PyCFunction)PyMatcher_Reset, METH_NOARGS, "Reset"},
     {NULL}  /* Sentinel */
 };
 
+// Class definition.
 static PyTypeObject PyMatcherType = {
     PyObject_HEAD_INIT(NULL)
     0,                         /*ob_size*/
@@ -175,14 +192,13 @@ static PyTypeObject PyMatcherType = {
 
 PyMODINIT_FUNC initAhoCorasick(void)
 {
-  // (void) Py_InitModule("AhoCorasick", AhoMethods);
   PyObject* m;
 
   if (PyType_Ready(&PyMatcherType) < 0)
       return;
 
   m = Py_InitModule3("AhoCorasick", AhoMethods,
-                     "Example module that creates an extension type.");
+                     "Provides an Aho-Corasick matcher.");
 
   if (m == NULL)
     return;
