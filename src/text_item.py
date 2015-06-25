@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 #-*- coding: utf-8 -*-
 import textwrap
-from numpy.random.mtrand import set_state
 
 states = {0 : "Ethnic", 1 : "Non-ethnic", 2 : "Controversal", 3 : "Undefined"}
 states_rev = {value : key for key, value in states.items()}

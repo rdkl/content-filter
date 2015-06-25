@@ -1,7 +1,7 @@
 #-*-coding: utf-8 -*-
 
 import wx
-from src.text_item import states
+from text_item import states
 
 
 ##############################################################################
@@ -76,7 +76,7 @@ class MainFrame(wx.Frame):
         
         self.button_load.Bind(wx.EVT_BUTTON, self.OnKeyPressed)
 
-        self.PrintTextItem(self.handler.GetText())
+        #self.PrintTextItem(self.handler.GetText())
         self.Layout()
         
     #-------------------------------------------------------------------------
