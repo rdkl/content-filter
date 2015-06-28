@@ -12,7 +12,10 @@ class Handler(object):
         
         self.__reader = FileReader('../data/small_ethnic_data_lem.csv',
                                    '../data/small_ethnic_data_no_lem.csv')
-        self.__gen = self.__reader.GetTextGenerator()
+        
+        print self.__storage.GetMaxId()
+        self.__gen = self.__reader.GetTextGenerator(
+                                        self.__storage.GetMaxId() + 2)
         self.__last_text_item = None
         
     #-------------------------------------------------------------------------

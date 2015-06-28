@@ -6,7 +6,7 @@ from src.text_item import states
 
 ##############################################################################
 class MainFrame(wx.Frame):
-    def __init__(self, handler, title = 'GUI', size = (1366, 768)):
+    def __init__(self, handler, title = 'GUI', size = (1200, 700)):
         self.handler = handler
         wx.Frame.__init__(self, parent=None, id=-1, title=title, size=size)
         self.DoLayout()
@@ -33,19 +33,22 @@ class MainFrame(wx.Frame):
         parent_sizer = wx.BoxSizer(wx.VERTICAL)
         texts_sizer = wx.BoxSizer(wx.HORIZONTAL)
         button_sizer = wx.BoxSizer(wx.HORIZONTAL)
-         
+        
+        textbox_size = ((self.Size[0] - 40) / 3, self.Size[1] - 50)
+        print textbox_size
+        
         self.text_info, sizer_info = self.MakeStaticText(
                                              text="Good news, everyone!", 
                                              label="Information",
-                                             size=(450, 700))
+                                             size=textbox_size)
         self.text_non_lemm, sizer_non_lemm = self.MakeStaticText(
                                              text="Non-lemm text\n", 
                                              label="Non lematized text",
-                                             size=(450, 700))
+                                             size=textbox_size)
         self.text_lemm, sizer_lemm = self.MakeStaticText(
                                              text="Lemm text\n", 
                                              label="Lematized text",
-                                             size=(450, 700))
+                                             size=textbox_size)
                 
         texts_sizer.Add(sizer_info)
         texts_sizer.Add(sizer_non_lemm)

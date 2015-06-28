@@ -19,12 +19,17 @@ class DocumentStorage(object):
     #-------------------------------------------------------------------------    
     def Load(self, filename="../data/saved_documents"):
         self.dict = cPickle.load(open(filename, "rb"))
-        print self.dict.items()
+        for item in sorted(self.dict.keys()):
+            print self.dict[item]
 
     #-------------------------------------------------------------------------    
     def GetDocuments(self):
         # Should return matrix of features and labels (numpy matrix and array)
         pass
     
-    #-------------------------------------------------------------------------    
+    #-------------------------------------------------------------------------
+    def GetMaxId(self):
+        return int(max(self.dict.keys() + ["0"]))    
+
+    #-------------------------------------------------------------------------
 ##############################################################################
