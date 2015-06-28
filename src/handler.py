@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 #-*- coding: utf-8 -*-
 
-from src.document_storage import DocumentStorage
-from src.file_reader import FileReader
+from document_storage import DocumentStorage
+from file_reader import FileReader
 
 ##############################################################################
 class Handler(object):

@@ -4,7 +4,7 @@
 import wx
 
 from gui.MainFrame import MainFrame
-from src.handler import Handler
+from handler import Handler
 
 
 ##############################################################################
