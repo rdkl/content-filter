@@ -40,8 +40,7 @@ PyMatcher_dealloc(PyMatcher* self) {
 }
 
 static PyObject * 
-PyMatcher_new(PyTypeObject *type, PyObject *args, PyObject *kwds)
-{
+PyMatcher_new(PyTypeObject *type, PyObject *args, PyObject *kwds) {
     PyMatcher *self;
 
     self = (PyMatcher *)type->tp_alloc(type, 0);
@@ -60,8 +59,7 @@ PyMatcher_members[] = {
 };
 
 static PyObject * 
-PyMatcher_Init(PyMatcher* self, PyObject *args)
-{
+PyMatcher_Init(PyMatcher* self, PyObject *args) {
   const char *command;
   if (!PyArg_ParseTuple(args, "s", &command))
     return NULL;
@@ -77,7 +75,7 @@ PyMatcher_Init(PyMatcher* self, PyObject *args)
     // empty lines: size = 2.
     if (word.size() > 4) {
       word.pop_back();
-      words.push_back(word);
+      words.push_back(" " + word + " ");
     }
   }
   
@@ -205,5 +203,5 @@ PyMODINIT_FUNC initAhoCorasick(void)
     return;
 
   Py_INCREF(&PyMatcherType);
-  PyModule_AddObject(m, "Matcher", (PyObject *)&PyMatcherType);
+  PyModule_AddObject(m, "Matcher", (PyObject*) &PyMatcherType);
 }

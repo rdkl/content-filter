@@ -1,13 +1,15 @@
 #-*-coding: utf-8 -*-
 
 import wx
-from text_item import states
+from src.text_item import states
+from src.matcher import Matcher
 
 
 ##############################################################################
 class MainFrame(wx.Frame):
     def __init__(self, handler, title = 'GUI', size = (1200, 700)):
         self.handler = handler
+        self.matcher = Matcher()
         wx.Frame.__init__(self, parent=None, id=-1, title=title, size=size)
         self.DoLayout()
                 
@@ -35,12 +37,12 @@ class MainFrame(wx.Frame):
         button_sizer = wx.BoxSizer(wx.HORIZONTAL)
         
         textbox_size = ((self.Size[0] - 40) / 3, self.Size[1] - 50)
-        print textbox_size
         
         self.text_info, sizer_info = self.MakeStaticText(
-                                             text="Good news, everyone!", 
-                                             label="Information",
-                                             size=textbox_size)
+                                            text="Good news, everyone!", 
+                                            label="Information",
+                                            size=(textbox_size[0] / 2, 
+                                                  textbox_size[1]))
         self.text_non_lemm, sizer_non_lemm = self.MakeStaticText(
                                              text="Non-lemm text\n", 
                                              label="Non lematized text",
@@ -49,11 +51,17 @@ class MainFrame(wx.Frame):
                                              text="Lemm text\n", 
                                              label="Lematized text",
                                              size=textbox_size)
+        
+        self.text_words, sizer_words = self.MakeStaticText(
+                                             text="Found words\n", 
+                                             label="Words from list",
+                                             size=(textbox_size[0] / 2, 
+                                                  textbox_size[1]))
                 
         texts_sizer.Add(sizer_info)
         texts_sizer.Add(sizer_non_lemm)
-        texts_sizer.Add(sizer_lemm)  
-        
+        texts_sizer.Add(sizer_lemm) 
+        texts_sizer.Add(sizer_words)
           
         self.button_save = wx.Button(self, wx.NewId(), "Save data")
         self.button_load = wx.Button(self, wx.NewId(), "Load data")
@@ -79,7 +87,7 @@ class MainFrame(wx.Frame):
         
         self.button_load.Bind(wx.EVT_BUTTON, self.OnKeyPressed)
 
-        #self.PrintTextItem(self.handler.GetText())
+        self.PrintTextItem(self.handler.GetText())
         self.Layout()
         
     #-------------------------------------------------------------------------
@@ -90,6 +98,18 @@ class MainFrame(wx.Frame):
     def PrintTextItem(self, text_item):
         self.text_lemm.SetValue(text_item.text_lem)
         self.text_non_lemm.SetValue(text_item.text_full)
+        
+        words = self.matcher.FindWordsInText(text_item.text_lem)
+        all_words = self.matcher.GetDict()
+        
+        string = ""
+        for item in words:
+            string += "%.2d " % words[item] + all_words[item] + "\n"
+        
+        if len(words) == 0:
+            string = "No words found"
+            
+        self.text_words.SetValue(string)
         
     #-------------------------------------------------------------------------
     def OnButtonClosePressed(self, event):
@@ -113,7 +133,8 @@ class MainFrame(wx.Frame):
         # response
         # Load next document and save info about that document.
         print response
-        self.handler.SetState(response)
+        if not response is None:
+            self.handler.SetState(response)
         self.PrintTextItem(self.handler.GetText())
         
     #-------------------------------------------------------------------------

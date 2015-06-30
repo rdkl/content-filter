@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 #-*- coding: utf-8 -*-
 
+import sys
 import wx
 
 from gui.MainFrame import MainFrame
@@ -26,6 +27,7 @@ class App(wx.App):
 
 #-----------------------------------------------------------------------------
 if __name__ == "__main__":
+    sys.path.append("..")
     app = App()
     app.MainLoop()
     

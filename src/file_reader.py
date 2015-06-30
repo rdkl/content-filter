@@ -30,7 +30,7 @@ class FileReader(object):
     #-------------------------------------------------------------------------
     def reencode(self, file_lines):
             for line in file_lines:
-                yield line.decode('windows-1251').encode('utf-8')
+                yield line.decode('windows-1251', errors='ignore').encode('utf-8')
     
     #-------------------------------------------------------------------------    
     def __next_lem(self):

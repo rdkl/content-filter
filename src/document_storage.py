@@ -18,9 +18,10 @@ class DocumentStorage(object):
     
     #-------------------------------------------------------------------------    
     def Load(self, filename="../data/saved_documents"):
-        self.dict = cPickle.load(open(filename, "rb"))
-        for item in sorted(self.dict.keys()):
-            print self.dict[item]
+        print filename
+        #self.dict = cPickle.load(open(filename, "rb"))
+        #for item in sorted(self.dict.keys()):
+        #     print self.dict[item]
 
     #-------------------------------------------------------------------------    
     def GetDocuments(self):
