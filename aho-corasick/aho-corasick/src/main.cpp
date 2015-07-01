@@ -3,6 +3,7 @@
 #include <iostream>
 #include <vector>
 #include <fstream>
+#include <string>
 
 #include "Python.h"
 #include "structmember.h"
@@ -75,7 +76,7 @@ PyMatcher_Init(PyMatcher* self, PyObject *args) {
     // empty lines: size = 2.
     if (word.size() > 4) {
       word.pop_back();
-      words.push_back(" " + word + " ");
+      words.push_back(" " + word + "");
     }
   }
   
@@ -104,6 +105,9 @@ PyMatcher_FindWordsInText(PyObject *self, PyObject *args) {
   }
   
   std::string text(input_string);
+
+  std::cout << "|" << text << "|\n";
+  std::cout << "|" << words[0] << "|\n";
   
   // Find words. All occurences are stored in words_occurrences_by_id_.
   for (size_t offset = 0; offset < text.size(); ++offset) {
