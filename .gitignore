@@ -1,8 +1,20 @@
+# Compiled python files.
 src/**/*.pyc
-src/**/.*
-src/scripts/test*
-src/scripts/build/*
-**/.*
-data/*
-libs/
 
+# Test files.
+src/scripts/test*
+
+# Additional data.
+data/*
+
+# Hidden PyDev/Eclipse project (and more) files.
+**/.*
+
+# AhoCorasick Windows build dir.
+aho-corasick/build
+
+# AhoCorasick Linux build dir.
+src/scripts/build
+
+# Compiled libs.
+src/libs/*

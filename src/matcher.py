@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #-*- coding: utf-8 -*-
 
-import src.libs.AhoCorasick as AhoCorasick
+import libs.AhoCorasick as AhoCorasick
 
 ##############################################################################
 class Matcher(object):

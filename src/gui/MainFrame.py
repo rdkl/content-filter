@@ -1,8 +1,8 @@
 #-*-coding: utf-8 -*-
 
 import wx
-from src.text_item import states
-from src.matcher import Matcher
+from text_item import states
+from matcher import Matcher
 
 
 ##############################################################################
