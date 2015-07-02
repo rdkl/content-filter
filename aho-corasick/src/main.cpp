@@ -215,7 +215,7 @@ static PyTypeObject PyMatcherType = {
 PyMODINIT_FUNC initAhoCorasick64(void) {
   const char module_name[] = "AhoCorasick64";
   const char module_description[] = "Provides an Aho-Corasick matcher (64 bit).";
-#elif
+#elif defined(ENV32_GCC) || defined(ENV32_MSVC)
 PyMODINIT_FUNC initAhoCorasick32(void) {
   const char module_name[] = "AhoCorasick32";
   const char module_description[] = "Provides an Aho-Corasick matcher (32 bit).";
