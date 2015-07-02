@@ -93,8 +93,8 @@ PyMatcher_Init(PyMatcher* self, PyObject *args) {
         // First line (should be empty) of file contains 4 bytes of info. Also skips
         // empty lines: size = 2.
         if (word.size() > 4) {
-            word.pop_back();
-            words.push_back(" " + word + "");
+            // word.pop_back();
+            words.push_back(" " + word + " ");
         }
     }
     

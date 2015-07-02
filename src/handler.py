@@ -11,17 +11,17 @@ from file_reader import FileReader
 class Handler(object):
     def __init__(self, prefix="./"):
         self.__storage = DocumentStorage()
-        print prefix + "../data/saved_documents"
+        # print prefix + "../data/saved_documents"
         self.__storage.Load(prefix + "../data/saved_documents")
         
-        #self.__reader = FileReader(prefix + '../data/small_ethnic_data_lem.csv',
-        #                           prefix + '../data/small_ethnic_data_no_lem.csv')
-        self.__reader = FileReader('/media/rdkl/data/ethnic_data/lem.csv',
-                                   '/media/rdkl/data/ethnic_data/no_lem.csv')
+        self.__reader = FileReader(prefix + '../data/small_ethnic_data_lem.csv',
+                                   prefix + '../data/small_ethnic_data_no_lem.csv')
+        # self.__reader = FileReader('/media/rdkl/data/ethnic_data/lem.csv',
+        #                            '/media/rdkl/data/ethnic_data/no_lem.csv')
         
-        print self.__storage.GetMaxId()
+        # print self.__storage.GetMaxId()
         self.__gen = self.__reader.GetTextGenerator(2)
-                        #self.__storage.GetMaxId() + 2 + random.randint(0, 40))
+        # self.__storage.GetMaxId() + 2 + random.randint(0, 40))
         self.__last_text_item = None
         
     #-------------------------------------------------------------------------

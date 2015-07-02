@@ -96,8 +96,8 @@ class MainFrame(wx.Frame):
        
     #-------------------------------------------------------------------------
     def PrintTextItem(self, text_item):
-        self.text_lemm.SetValue(text_item.text_lem)
-        self.text_non_lemm.SetValue(text_item.text_full)
+        self.text_lemm.SetValue(text_item.text_lem.decode("utf-8"))
+        self.text_non_lemm.SetValue(text_item.text_full.decode("utf-8"))
         
         words = self.matcher.FindWordsInText(text_item.text_lem)
         all_words = self.matcher.GetDict()
@@ -109,7 +109,7 @@ class MainFrame(wx.Frame):
         if len(words) == 0:
             string = "No words found"
             
-        self.text_words.SetValue(string)
+        self.text_words.SetValue(string.decode("utf-8"))
         
     #-------------------------------------------------------------------------
     def OnButtonClosePressed(self, event):

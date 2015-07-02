@@ -1,8 +1,11 @@
 #!/usr/bin/env python
 #-*- coding: utf-8 -*-
 
-import libs.AhoCorasick as AhoCorasick
-
+try:
+	import libs.AhoCorasick64 as AhoCorasick
+except:
+	print "Test"
+	
 ##############################################################################
 class Matcher(object):
     """ 
@@ -26,7 +29,7 @@ class Matcher(object):
                     
     #-------------------------------------------------------------------------    
     def FindWordsInText(self, text):
-        return self.__matcher.FindWordsInText(" " + text)
+        return self.__matcher.FindWordsInText(" " + text + " ")
     
     #-------------------------------------------------------------------------
     def GetDict(self):
