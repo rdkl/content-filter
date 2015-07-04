@@ -2,10 +2,14 @@
 #-*- coding: utf-8 -*-
 
 try:
-	import libs.AhoCorasick64 as AhoCorasick
+  import libs.AhoCorasick64 as AhoCorasick
 except:
-	print "Test"
-	
+  print "64-bit AhoCorasick lib not found."
+  try:
+    import libs.AhoCorasick32 as AhoCorasick
+  except:
+    print "32-bit AhoCorasick lib not found."
+	  
 ##############################################################################
 class Matcher(object):
     """ 

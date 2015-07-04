@@ -90,10 +90,14 @@ PyMatcher_Init(PyMatcher* self, PyObject *args) {
 
     std::string word;
     while (std::getline(infile, word)) {
-        // First line (should be empty) of file contains 4 bytes of info. Also skips
-        // empty lines: size = 2.
+        // First line (should be empty) of file contains 4 bytes of info. Also 
+        // skipsempty lines: size = 2.
         if (word.size() > 4) {
+            // Initial file formatting.
             // word.pop_back();
+            
+            // Text should be lemmatized. To find only whole words insert 
+            // spaces into begin and end of text.
             words.push_back(" " + word + " ");
         }
     }

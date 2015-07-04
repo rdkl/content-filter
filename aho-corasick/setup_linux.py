@@ -1,7 +1,7 @@
 import shutil
 from distutils.core import setup, Extension
 
-aho = Extension("AhoCorasick",
+aho = Extension("AhoCorasick64",
                 sources = ["src/Automaton.cpp",
                            "src/AutomatonBuilder.cpp",
                            "src/AutomatonGraph.cpp",
@@ -13,11 +13,11 @@ aho = Extension("AhoCorasick",
                            "src/TerminalLinkCalculator.cpp"],
                 extra_compile_args=["-std=c++11"],)
 
-setup (name = "AhoCorasick",
+setup (name = "AhoCorasick64",
        version = "1.0",
        description = "Python wrapper for C++ Aho-Corasick implementation",
        ext_modules = [aho],
        author = "Sergey Voronov")
        
-shutil.copyfile("build/lib.linux-x86_64-2.7/AhoCorasick.so", 
-                "../src/libs/AhoCorasick.so")
+shutil.copyfile("build/lib.linux-x86_64-2.7/AhoCorasick64.so", 
+                "../src/libs/AhoCorasick64.so")
