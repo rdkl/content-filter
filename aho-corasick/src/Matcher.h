@@ -23,7 +23,10 @@ public:
   void Print();
 
   std::vector<size_t> words_occurrences_by_id_;
+  // By end position.
+  std::vector<std::vector<size_t>> words_occurrences_by_pos_;
 private:
+  size_t text_pos_;
   std::vector<std::string> words_;
   NodeReference state_;
   std::unique_ptr<Automaton> aho_corasick_automaton_;

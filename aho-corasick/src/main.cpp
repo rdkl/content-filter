@@ -128,8 +128,8 @@ PyMatcher_FindWordsInText(PyObject *self, PyObject *args) {
     
     std::string text(input_string);
 
-    std::cout << "|" << text << "|\n";
-    std::cout << "|" << words[0] << "|\n";
+    // std::cout << "|" << text << "|\n";
+    // std::cout << "|" << words[0] << "|\n";
     
     // Find words. All occurences are stored in words_occurrences_by_id_.
     for (size_t offset = 0; offset < text.size(); ++offset) {
@@ -155,6 +155,53 @@ PyMatcher_FindWordsInText(PyObject *self, PyObject *args) {
     return dict;
 }
 
+// Now it resets matcher after every string.
+static PyObject *
+PyMatcher_FindWordsInTextWIthPositions(PyObject *self, PyObject *args) {
+    // Local assigment of matcher.
+    Matcher* matcher = (Matcher*) ((PyMatcher*) self)->matcher;
+
+    // Get input text from arguments.
+    const char *input_string;
+    if (!PyArg_ParseTuple(args, "s", &input_string)) {
+        return NULL;
+    }
+
+    std::string text(input_string);
+
+    // Find words. All occurences are stored in words_occurrences_by_id_.
+    for (size_t offset = 0; offset < text.size(); ++offset) {
+        matcher->Scan(text[offset]);
+    }
+    std::vector<std::vector<size_t>> matches = matcher->words_occurrences_by_pos_;
+
+    // Prints results as vector (with all zeros) to console.
+    // Print(matches);
+
+    // Return dict of matches.
+    PyObject *dict_main = PyDict_New();
+
+
+    for (size_t i = 0; i < matches.size(); ++i) {
+        PyObject *dict_local = PyDict_New();
+
+        if (matches[i].size() != 0) {
+           PyObject* key = Py_BuildValue("i", i);
+
+           for (size_t index = 0; index < matches[i].size(); ++index) {
+               PyObject* key_local = Py_BuildValue("i", index);
+               PyObject* val_local = Py_BuildValue("i", matches[i][index]);
+               PyDict_SetItem(dict_local, key_local, val_local);
+           }
+
+           PyDict_SetItem(dict_main, key, dict_local);
+        }
+    }
+
+    matcher->Reset();
+    return dict_main;
+}
+
 
 // Uncomment if there will be function like "FindWordsInCurrentLineOfText". 
 // static PyObject *
@@ -168,6 +215,9 @@ static PyMethodDef PyMatcher_methods[] = {
         {"Init", (PyCFunction)PyMatcher_Init, METH_VARARGS, "Init"},
         {"FindWordsInText", (PyCFunction)PyMatcher_FindWordsInText, METH_VARARGS, 
         "FWIT"},
+        {"FindWordsInTextWithPositions",
+        (PyCFunction)PyMatcher_FindWordsInTextWIthPositions, METH_VARARGS,
+        "FWITWP"},
         // {"Reset", (PyCFunction)PyMatcher_Reset, METH_NOARGS, "Reset"},
         {NULL}    /* Sentinel */
 };
