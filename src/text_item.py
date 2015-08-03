@@ -1,45 +1,31 @@
 #!/usr/bin/env python
-#-*- coding: utf-8 -*-
+# *- coding: utf-8 -*-
 import textwrap
 
-states = {0 : "Ethnic", 1 : "Non-ethnic", 2 : "Controversal", 3 : "Undefined"}
+states = {0 : "Ethnic", 1 : "Non-ethnic", 2 : "Controversial", 3 : "Undefined"}
 states_rev = {value : key for key, value in states.items()}
 
 ##############################################################################
 class TextItem(object):
-    def __init__(self, id="-1", state=3, name="Default TextItem", 
-                 url="empty url",
-                 date="", time="", text_lem="No text available", 
+    def __init__(self, id="-1", state=3,
+                 text_lem="No text available",
                  text_full="No text available"):
         self.__id = id
-        self.__name = name
-        self.__url = url
-        self.__date = date
-        self.__time = time
         self.__text_lem = text_lem
         self.__text_full = text_full
         self.__state = state
-        if self.__name != "Default TextItem":
-            self.__is_initialized = True
-        else:
-            self.__is_initialized = False
     
-    #-------------------------------------------------------------------------
+    # ------------------------------------------------------------------------
     @property
     def id(self):
         return self.__id
         
-    #-------------------------------------------------------------------------
-    @property
-    def name(self):
-        return self.__name
-        
-    #-------------------------------------------------------------------------
+    # ------------------------------------------------------------------------
     @property
     def state(self):
         return self.__state
     
-    #-------------------------------------------------------------------------
+    # ------------------------------------------------------------------------
     def set_state(self, state):
         if type(state) == int:
             if state in states.keys():
@@ -58,51 +44,35 @@ class TextItem(object):
             except:
                 raise TypeError("Unknown state")
         
-    #-------------------------------------------------------------------------
+    # ------------------------------------------------------------------------
     @property
     def state_string(self):
         return states[self.__state]
         
-    #-------------------------------------------------------------------------
-    @property
-    def url(self):
-        return self.__url
-        
-    #-------------------------------------------------------------------------
-    @property
-    def date(self):
-        return self.__date
-        
-    #-------------------------------------------------------------------------
+    # ------------------------------------------------------------------------
     @property
     def text_lem(self):
         return self.__text_lem
         
-    #-------------------------------------------------------------------------
+    # ------------------------------------------------------------------------
     @property
     def text_full(self):
         return self.__text_full
 
-    #-------------------------------------------------------------------------
-    def IsInitialized(self):
-        return self.__is_initialized
-    
-    #-------------------------------------------------------------------------
+    # ------------------------------------------------------------------------
     def __str__(self):
         res = "-" * 80 + "\n"
-        res += "ID = " + self.id 
-        res += ", user: |" + self.name + "| from |" + self.url + "|\n"
+        res += "ID = " + str(self.id) + ", state="+ str(self.state) + "\n"
         res += "Full text: |" + textwrap.fill(self.text_full, 100) + "|\n"
         res += "=" * 80 + "\n"
         res += "Lemm text: |" + textwrap.fill(self.text_lem, 100) + "|\n"
-        res += "Date: " + self.date + ", time = " + self.__time + "."
         res += "\n" + "-" * 80 + "\n"
         return res
     
-    #-------------------------------------------------------------------------
+    # ------------------------------------------------------------------------
 ##############################################################################
 
-#-----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
 if __name__ == "__main__":
     ti = TextItem("-1", "name", "url", "date", "time", "1", "1")
     print ti

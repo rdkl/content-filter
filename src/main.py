@@ -1,11 +1,15 @@
 #!/usr/bin/env python
-#-*- coding: utf-8 -*-
+# *- coding: utf-8 -*-
 
+import os
 import sys
 import wx
 
-from gui.MainFrame import MainFrame
-from handler import Handler
+project_path = os.path.abspath(os.path.dirname(os.path.abspath(__file__)) +
+                               "/../")
+
+from src.gui.MainFrame import MainFrame
+from src.handler import Handler
 
 
 ##############################################################################
@@ -17,15 +21,15 @@ class App(wx.App):
         self.SetTopWindow(self.frame)        
         return True
 
-    #-------------------------------------------------------------------------
+    # ------------------------------------------------------------------------
     def OnExit(self):
         del self.handler
         print "OnExit"
     
-    #-------------------------------------------------------------------------
+    # ------------------------------------------------------------------------
 ##############################################################################
 
-#-----------------------------------------------------------------------------
+# ----------------------------------------------------------------------------
 if __name__ == "__main__":
     sys.path.append("..")
     app = App()
