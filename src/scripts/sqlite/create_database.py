@@ -114,6 +114,10 @@ if __name__ == "__main__":
     #                   "/mnt/data/ethnic_data/no_lem_doc_1581334.csv",
     #                   conn, "doc_1581334.csv")
 
+    # load_data_from_csv("/mnt/data/ethnic_data/lem_doc_1581334.csv",
+    #                   "/mnt/data/ethnic_data/no_lem_doc_1581334.csv",
+    #                   conn, "doc_1581334.csv")
+
     # load_data_from_csv("/mnt/data/ethnic_data/comments_lem.csv",
     #                   "/mnt/data/ethnic_data/comments_origin.csv",
     #                    conn, "comments.csv")

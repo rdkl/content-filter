@@ -94,7 +94,7 @@ PyMatcher_Init(PyMatcher* self, PyObject *args) {
         // skipsempty lines: size = 2.
         if (word.size() > 4) {
             // Initial file formatting.
-            // word.pop_back();
+            word.pop_back();
             
             // Text should be lemmatized. To find only whole words insert 
             // spaces into begin and end of text.
@@ -157,7 +157,7 @@ PyMatcher_FindWordsInText(PyObject *self, PyObject *args) {
 
 // Now it resets matcher after every string.
 static PyObject *
-PyMatcher_FindWordsInTextWIthPositions(PyObject *self, PyObject *args) {
+PyMatcher_FindWordsInTextWithPositions(PyObject *self, PyObject *args) {
     // Local assigment of matcher.
     Matcher* matcher = (Matcher*) ((PyMatcher*) self)->matcher;
 
@@ -168,7 +168,12 @@ PyMatcher_FindWordsInTextWIthPositions(PyObject *self, PyObject *args) {
     }
 
     std::string text(input_string);
-
+    
+    // std::cout << "|" << input_string << "}" << std::endl;
+    // std::cout << "|" << words[0] << "|||" << std::endl;
+    // std::cout << "|" << words[1] << "|||" << std::endl;
+    // std::cout.flush();
+    
     // Find words. All occurences are stored in words_occurrences_by_id_.
     for (size_t offset = 0; offset < text.size(); ++offset) {
         matcher->Scan(text[offset]);
@@ -210,13 +215,13 @@ PyMatcher_FindWordsInTextWIthPositions(PyObject *self, PyObject *args) {
 //     return Py_None;
 // }
 
-
 static PyMethodDef PyMatcher_methods[] = {
-        {"Init", (PyCFunction)PyMatcher_Init, METH_VARARGS, "Init"},
+        {"Init", (PyCFunction)PyMatcher_Init, METH_VARARGS, 
+        "Initialisation from file with words."},
         {"FindWordsInText", (PyCFunction)PyMatcher_FindWordsInText, METH_VARARGS, 
         "FWIT"},
         {"FindWordsInTextWithPositions",
-        (PyCFunction)PyMatcher_FindWordsInTextWIthPositions, METH_VARARGS,
+        (PyCFunction)PyMatcher_FindWordsInTextWithPositions, METH_VARARGS,
         "FWITWP"},
         // {"Reset", (PyCFunction)PyMatcher_Reset, METH_NOARGS, "Reset"},
         {NULL}    /* Sentinel */
