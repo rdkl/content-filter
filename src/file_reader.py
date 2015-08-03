@@ -31,9 +31,10 @@ class FileReader(object):
 
     # ------------------------------------------------------------------------
     def reencode(self, file_lines):
-            for line in file_lines:
-                yield line.decode('windows-1251', errors='ignore').encode('utf-8')
-    
+        # Default encoding for csv made on win.
+        for line in file_lines:
+            yield line.decode('windows-1251', errors='ignore').encode('utf-8')
+
     # ------------------------------------------------------------------------    
     def __next_lem(self):
         for items in self.__reader_lem:
@@ -70,11 +71,7 @@ class FileReader(object):
             else:
                 yield TextItem(id=list_lem[0], 
                                state=3,
-                               name=list_lem[2], 
-                               url=list_lem[3], 
-                               date=list_lem[4], 
-                               time=list_lem[5],
-                               text_lem=list_lem[1], 
+                               text_lem=list_lem[1],
                                text_full=list_non_lem[1])
                 
     # ------------------------------------------------------------------------
@@ -86,4 +83,3 @@ if __name__ == "__main__":
     gen = file_reader.GetTextGenerator()
     print gen.next()
     print gen.next()
-    

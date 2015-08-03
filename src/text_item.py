@@ -31,9 +31,7 @@ class TextItem(object):
             if state in states.keys():
                 self.__state = state
         else:
-            #print states_rev
             if state in states_rev.keys():
-                #print states_rev[state], type(states_rev[state])
                 self.set_state(states_rev[state])
                 return
             
