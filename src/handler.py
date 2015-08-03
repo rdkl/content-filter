@@ -1,48 +1,53 @@
 #!/usr/bin/env python
-#-*- coding: utf-8 -*-
+# *- coding: utf-8 -*-
 
 import random
+import sqlite3
 
-from document_storage import DocumentStorage
-from file_reader import FileReader
+from text_item import TextItem
 
 
-##############################################################################
+################################################################################
 class Handler(object):
     def __init__(self, prefix="./"):
-        self.__storage = DocumentStorage()
-        # print prefix + "../data/saved_documents"
-        self.__storage.Load(prefix + "../data/saved_documents")
-        
-        self.__reader = FileReader(prefix + '../data/small_ethnic_data_lem.csv',
-                                   prefix + '../data/small_ethnic_data_no_lem.csv')
-        # self.__reader = FileReader('/media/rdkl/data/ethnic_data/lem.csv',
-        #                            '/media/rdkl/data/ethnic_data/no_lem.csv')
-        
-        # print self.__storage.GetMaxId()
-        self.__gen = self.__reader.GetTextGenerator(2)
-        # self.__storage.GetMaxId() + 2 + random.randint(0, 40))
-        self.__last_text_item = None
-        
-    #-------------------------------------------------------------------------
-    def GetText(self):
-        self.__last_text_item = self.__gen.next()
-        return self.__last_text_item
+        self.__storage = sqlite3.connect("../data/sqlite_local.db")
+        self.__gen = None
 
-    #-------------------------------------------------------------------------
+    # --------------------------------------------------------------------------
+    def __get_text_gen(self):
+            for item in self.__text_rows:
+                yield TextItem(id=item[0], state=item[3],
+                               text_lem=item[1].encode("utf-8"),
+                               text_full=item[2].encode("utf-8"))
+
+    # --------------------------------------------------------------------------
+    def GetText(self):
+        if not self.__gen:
+            rows = self.__storage.execute('SELECT * FROM texts')
+            self.__text_rows = rows.fetchall()
+            self.__gen = self.__get_text_gen()
+
+        self.__last_item = self.__gen.next()
+        return self.__last_item
+
+    # --------------------------------------------------------------------------
     def SetState(self, state):
-        self.__last_text_item.set_state(state)
-        self.__storage.AddDocument(self.__last_text_item.id, 
-                                   self.__last_text_item)
-            
-    #-------------------------------------------------------------------------
+        self.__last_item.set_state(state)
+        t = (self.__last_item.state, self.__last_item.id)
+        self.__storage.execute("UPDATE texts SET state=? "
+                               "WHERE text_database_index=?", t)
+        print "Cnahges: ", self.__storage.total_changes
+
+    # --------------------------------------------------------------------------
     def __del__(self):
-        #self.__storage.Save()
+        self.__storage.commit()
         pass
 
-    #-------------------------------------------------------------------------            
-##############################################################################
+    # --------------------------------------------------------------------------
+################################################################################
 
 if __name__ == "__main__":
-    file_reader = Handler()
-    print file_reader.GetText()
+    handler = Handler()
+    print handler.GetText()
+    handler.SetState(2)
+    print handler.GetText()
