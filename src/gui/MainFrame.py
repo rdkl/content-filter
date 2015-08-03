@@ -1,9 +1,11 @@
 #-*-coding: utf-8 -*-
+import os
 
 import wx
-from text_item import states
-from matcher import Matcher
-
+import sys
+import re
+from src.text_item import states
+from src.matcher import Matcher
 
 ##############################################################################
 class MainFrame(wx.Frame):
@@ -12,6 +14,7 @@ class MainFrame(wx.Frame):
         self.matcher = Matcher()
         wx.Frame.__init__(self, parent=None, id=-1, title=title, size=size)
         self.DoLayout()
+
                 
     #-------------------------------------------------------------------------
     def MakeStaticText(self, 
@@ -20,7 +23,7 @@ class MainFrame(wx.Frame):
                        size=(250, 250)):
         text_panel = wx.Panel(self, wx.ID_ANY)
     
-        style = wx.TE_MULTILINE|wx.TE_READONLY|wx.TE_RICH
+        style = wx.TE_MULTILINE|wx.TE_READONLY|wx.TE_RICH2
         text_ctrl = wx.TextCtrl(text_panel, wx.ID_ANY, text, 
                                   style=style, 
                                   size=size)
@@ -96,9 +99,30 @@ class MainFrame(wx.Frame):
        
     #-------------------------------------------------------------------------
     def PrintTextItem(self, text_item):
-        self.text_lemm.SetValue(text_item.text_lem.decode("utf-8"))
+        # UTF-8 positions, while text in textctrl is unicode.
+        words_with_positions = \
+            self.matcher.FindWordsInTextWithPositions(text_item.text_lem)
+
+        self.text_lemm.SetValue(text_item.text_lem)
+        text = text_item.text_lem.decode("utf-8")
+
+        words = self.matcher.GetDict()
+        for word_index in words_with_positions:
+            word_len = len(words[word_index].decode("utf-8"))
+            starts = [m.start()
+                      for m in re.finditer(words[word_index].decode("utf-8"),
+                                           text)]
+            for start in starts:
+                self.text_lemm.SetStyle(start,
+                                        start + word_len,
+                                        wx.TextAttr("black", "yellow"))
+
+            #for position in words_with_positions[word_index]:
+            #    self.text_lemm.SetStyle(get_position(position),
+            #                            get_position(position + word_len),
+            #                            wx.TextAttr("black", "yellow"))
+
         self.text_non_lemm.SetValue(text_item.text_full.decode("utf-8"))
-        
         words = self.matcher.FindWordsInText(text_item.text_lem)
         all_words = self.matcher.GetDict()
         
@@ -130,12 +154,11 @@ class MainFrame(wx.Frame):
             
         dlg.Destroy()
         
-        # response
         # Load next document and save info about that document.
-        print response
-        if not response is None:
+        if response is not None:
             self.handler.SetState(response)
+
         self.PrintTextItem(self.handler.GetText())
         
-    #-------------------------------------------------------------------------
-##############################################################################
+    #---------------------------------------------------------------------------
+################################################################################
