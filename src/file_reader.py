@@ -1,10 +1,12 @@
 #!/usr/bin/env python
-#-*- coding: utf-8 -*-
+# *- coding: utf-8 -*-
 
 import csv
+import sys
 
 from text_item import TextItem
 
+csv.field_size_limit(sys.maxsize)
 
 ##############################################################################
 class FileReader(object):
@@ -26,23 +28,23 @@ class FileReader(object):
         except IOError:
             print "Please check the file with non-lematized texts", \
                 filename_non_lem
-            
-    #-------------------------------------------------------------------------
+
+    # ------------------------------------------------------------------------
     def reencode(self, file_lines):
             for line in file_lines:
                 yield line.decode('windows-1251', errors='ignore').encode('utf-8')
     
-    #-------------------------------------------------------------------------    
+    # ------------------------------------------------------------------------    
     def __next_lem(self):
         for items in self.__reader_lem:
             yield items
     
-    #-------------------------------------------------------------------------
+    # ------------------------------------------------------------------------
     def __next_non_lem(self):
         for items in self.__reader_non_lem:
             yield items
     
-    #-------------------------------------------------------------------------
+    # ------------------------------------------------------------------------
     def GetTextGenerator(self, lines_skipped_from_start=1):
         # Skip first line.
         gen_lem = self.__next_lem()
@@ -75,7 +77,7 @@ class FileReader(object):
                                text_lem=list_lem[1], 
                                text_full=list_non_lem[1])
                 
-    #-------------------------------------------------------------------------
+    # ------------------------------------------------------------------------
 ##############################################################################
 
 if __name__ == "__main__":
