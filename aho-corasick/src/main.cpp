@@ -94,7 +94,7 @@ PyMatcher_Init(PyMatcher* self, PyObject *args) {
         // skipsempty lines: size = 2.
         if (word.size() > 4) {
             // Initial file formatting.
-            word.pop_back();
+            // word.pop_back();
             
             // Text should be lemmatized. To find only whole words insert 
             // spaces into begin and end of text.
@@ -128,9 +128,6 @@ PyMatcher_FindWordsInText(PyObject *self, PyObject *args) {
     
     std::string text(input_string);
 
-    // std::cout << "|" << text << "|\n";
-    // std::cout << "|" << words[0] << "|\n";
-    
     // Find words. All occurences are stored in words_occurrences_by_id_.
     for (size_t offset = 0; offset < text.size(); ++offset) {
         matcher->Scan(text[offset]);
