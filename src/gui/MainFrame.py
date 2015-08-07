@@ -1,4 +1,4 @@
-#-*-coding: utf-8 -*-
+# *-coding: utf-8 -*-
 import os
 
 import wx
@@ -15,8 +15,7 @@ class MainFrame(wx.Frame):
         wx.Frame.__init__(self, parent=None, id=-1, title=title, size=size)
         self.DoLayout()
 
-                
-    #-------------------------------------------------------------------------
+    # ------------------------------------------------------------------------
     def MakeStaticText(self, 
                        text="Test text", 
                        label="Text label", 
@@ -33,7 +32,7 @@ class MainFrame(wx.Frame):
         
         return text_ctrl, staticbox_sizer
         
-    #-------------------------------------------------------------------------
+    # ------------------------------------------------------------------------
     def DoLayout(self): 
         parent_sizer = wx.BoxSizer(wx.VERTICAL)
         texts_sizer = wx.BoxSizer(wx.HORIZONTAL)
@@ -66,8 +65,8 @@ class MainFrame(wx.Frame):
         texts_sizer.Add(sizer_lemm) 
         texts_sizer.Add(sizer_words)
           
-        self.button_save = wx.Button(self, wx.NewId(), "Save data")
-        self.button_load = wx.Button(self, wx.NewId(), "Load data")
+        self.button_save = wx.Button(self, wx.NewId(), "Button")
+        self.button_load = wx.Button(self, wx.NewId(), "Next document")
         self.button_settings = wx.Button(self, wx.NewId(), "Settings")
         self.button_close = wx.Button(self, wx.ID_EXIT)
 
@@ -83,27 +82,29 @@ class MainFrame(wx.Frame):
         
         self.Bind(wx.EVT_BUTTON, self.OnButtonClosePressed, 
                   self.button_close)
-        
+
+        self.Bind(wx.EVT_KEY_UP, self.OnKeyPressed)
+
         parent_sizer.Add(texts_sizer, flag=wx.EXPAND, proportion=1)
         parent_sizer.Add(button_sizer, flag=wx.EXPAND)
         self.SetSizer(parent_sizer)
         
-        self.button_load.Bind(wx.EVT_BUTTON, self.OnKeyPressed)
+        self.button_load.Bind(wx.EVT_BUTTON, self.OnButtonLoadPressed)
 
         self.PrintTextItem(self.handler.GetText())
         self.Layout()
         
-    #-------------------------------------------------------------------------
+    # ------------------------------------------------------------------------
     def PrintIformation(self, string):
         self.text_info.AppendText(string)
        
-    #-------------------------------------------------------------------------
+    # ------------------------------------------------------------------------
     def PrintTextItem(self, text_item):
         # UTF-8 positions, while text in textctrl is unicode.
         words_with_positions = \
             self.matcher.FindWordsInTextWithPositions(text_item.text_lem)
 
-        self.text_lemm.SetValue(text_item.text_lem)
+        self.text_lemm.SetValue(text_item.text_lem.decode("utf-8"))
         text = text_item.text_lem.decode("utf-8")
 
         words = self.matcher.GetDict()
@@ -135,30 +136,38 @@ class MainFrame(wx.Frame):
             
         self.text_words.SetValue(string.decode("utf-8"))
         
-    #-------------------------------------------------------------------------
+    # ------------------------------------------------------------------------
     def OnButtonClosePressed(self, event):
         self.Close(True)
     
-    #-------------------------------------------------------------------------
-    def OnKeyPressed(self, event):
-        dlg = wx.SingleChoiceDialog(None,
-        'Is document ethnic?',
-        'Single Choice',
-         states.values())
-        
+    # --------------------------------------------------------------------------
+    def OnButtonLoadPressed(self, event):
+        self.CheckDialog()
+
+    # --------------------------------------------------------------------------
+    def CheckDialog(self):
+        dlg = wx.SingleChoiceDialog(None, 'Is document ethnic?',
+                                    'Single Choice', states.values())
+
         if dlg.ShowModal() == wx.ID_OK:
             response = dlg.GetStringSelection()
         else:
             response = None
             # return
-            
+
         dlg.Destroy()
-        
+
         # Load next document and save info about that document.
         if response is not None:
             self.handler.SetState(response)
 
         self.PrintTextItem(self.handler.GetText())
-        
-    #---------------------------------------------------------------------------
+
+    # ------------------------------------------------------------------------
+    def OnKeyPressed(self, event):
+        if event.GetKeyCode() == wx.WXK_SPACE:
+            self.CheckDialog()
+        else:
+            event.Skip()
+    # --------------------------------------------------------------------------
 ################################################################################
