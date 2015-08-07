@@ -107,20 +107,20 @@ if __name__ == "__main__":
     conn = sqlite3.connect('/mnt/data/Sync/content-filter/data_sqlite.db')
     conn.execute('pragma foreign_keys=ON')
 
-    # drop_tables(conn)
-    # create_tables_if_not_exist(conn)
+    drop_tables(conn)
+    create_tables_if_not_exist(conn)
 
-    # load_data_from_csv("/mnt/data/ethnic_data/lem_doc_1581334.csv",
-    #                   "/mnt/data/ethnic_data/no_lem_doc_1581334.csv",
-    #                   conn, "doc_1581334.csv")
+    load_data_from_csv("/mnt/data/ethnic_data/lemitize_101481_doc.csv",
+                       "/mnt/data/ethnic_data/non_lemitize_101481_doc.csv",
+                       conn, "101481_doc.csv")
 
-    # load_data_from_csv("/mnt/data/ethnic_data/lem_doc_1581334.csv",
-    #                   "/mnt/data/ethnic_data/no_lem_doc_1581334.csv",
-    #                   conn, "doc_1581334.csv")
+    load_data_from_csv("/mnt/data/ethnic_data/lem_doc_1581334.csv",
+                       "/mnt/data/ethnic_data/no_lem_doc_1581334.csv",
+                       conn, "doc_1581334.csv")
 
-    # load_data_from_csv("/mnt/data/ethnic_data/comments_lem.csv",
-    #                   "/mnt/data/ethnic_data/comments_origin.csv",
-    #                    conn, "comments.csv")
+    load_data_from_csv("/mnt/data/ethnic_data/comments_lem.csv",
+                      "/mnt/data/ethnic_data/comments_origin.csv",
+                        conn, "comments.csv")
 
     # load_data_from_csv(project_path + "/data/medium_ethnic_data_lem.csv",
     #                   project_path + "/data/medium_ethnic_data_no_lem.csv",

@@ -8,6 +8,7 @@ class Timer(object):
     def __init__(self):
         self.__last_time = time.time()
         self.__start_time = time.time()
+
     # --------------------------------------------------------------------------
     def set_point(self):
         self.__last_time = time.time()

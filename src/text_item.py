@@ -72,6 +72,6 @@ class TextItem(object):
 
 # ----------------------------------------------------------------------------
 if __name__ == "__main__":
-    ti = TextItem("-1", "name", "url", "date", "time", "1", "1")
+    ti = TextItem("-1" , 3, "1", "1")
     print ti
     print ti.text_full

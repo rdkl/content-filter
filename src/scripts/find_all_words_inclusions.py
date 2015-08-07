@@ -45,12 +45,12 @@ def get_inclusions(cursor):
             result[item[0]] = found_words
 
         if item[0] % 50000 == 0:
-            output =  "%.2f%% done (%d from %d)" % \
+            output = "%.2f%% done (%d from %d)" % \
                 (float(item[0]) / max_id * 100.0, item[0], max_id)
             timer.print_from_last_point(output)
 
     with open("../../data/words_inclusions.txt", "w") as log:
-        cPickle.dump([found_words, words], log)
+        cPickle.dump([result, words], log)
 
 # ------------------------------------------------------------------------------
 def copy_table(table_name, src_filename, dest):
@@ -76,6 +76,7 @@ def choose_rowids(number):
         zip(*sorted(zip(found_words_number.values(),
                         found_words_number.keys()),
                     reverse=True))
+
     words_counts_sorted, keys_count = \
         zip(*sorted(zip(found_words_counts.values(),
                         found_words_counts.keys()),
@@ -89,7 +90,6 @@ def choose_rowids(number):
 
 # ------------------------------------------------------------------------------
 def make_local_sql_database(full_database_path):
-
     local_database = sqlite3.connect('../../data/sqlite_local.db')
     local_database.execute('pragma foreign_keys=ON')
 
@@ -108,7 +108,7 @@ def make_local_sql_database(full_database_path):
                                    "WHERE text_database_index IN "
                                    "(SELECT key FROM chosen_ids);")
 
-    local_database.execute("DROP TABLE IF EXISTS texts;")
+    # local_database.execute("DROP TABLE IF EXISTS texts;")
     local_database.execute("""
       CREATE TABLE IF NOT EXISTS texts (
           text_database_index INTEGER PRIMARY KEY,
@@ -127,10 +127,11 @@ def make_local_sql_database(full_database_path):
     full_database.execute("DROP TABLE chosen_ids;")
     full_database.commit()
     local_database.commit()
+
 # ------------------------------------------------------------------------------
 if __name__ == "__main__":
     conn = sqlite3.connect('/mnt/data/Sync/content-filter/data_sqlite.db')
     conn.execute('pragma foreign_keys=ON')
 
-    # get_inclusions(conn.cursor())
+    get_inclusions(conn.cursor())
     make_local_sql_database('/mnt/data/Sync/content-filter/data_sqlite.db')
