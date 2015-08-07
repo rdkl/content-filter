@@ -23,7 +23,11 @@ class Handler(object):
     # --------------------------------------------------------------------------
     def GetText(self):
         if not self.__gen:
-            rows = self.__storage.execute('SELECT * FROM texts')
+            rows = self.__storage.execute("""
+                SELECT * FROM texts
+                WHERE state = 3;
+                """)
+
             self.__text_rows = rows.fetchall()
             self.__gen = self.__get_text_gen()
 
@@ -36,6 +40,7 @@ class Handler(object):
         t = (self.__last_item.state, self.__last_item.id)
         self.__storage.execute("UPDATE texts SET state=? "
                                "WHERE text_database_index=?", t)
+        self.__storage.commit()
         print "Cnahges: ", self.__storage.total_changes
 
     # --------------------------------------------------------------------------

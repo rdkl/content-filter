@@ -8,6 +8,8 @@ import wx
 project_path = os.path.abspath(os.path.dirname(os.path.abspath(__file__)) +
                                "/../")
 
+sys.path.append(project_path)
+
 from src.gui.MainFrame import MainFrame
 from src.handler import Handler
 
